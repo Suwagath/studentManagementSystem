@@ -162,9 +162,17 @@ public class Main {
 
     static void storeStudentDetailsToFile() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("students.txt"))) {
+            // Write header
+            writer.write(String.format("%-5s %-10s %-20s %-10s %-10s %-10s %-10s %-10s", "No", "ID", "Name", "Average", "Grade", "Module1", "Module2", "Module3"));
+            writer.newLine();
+            writer.write("------------------------------------------------------------------------------------------");
+            writer.newLine();
+
+            // Write student details
             for (int i = 0; i < studentCount; i++) {
                 Student s = students[i];
-                writer.write(s.getId() + "," + s.getName() + "," + s.getModules()[0].getMark() + "," + s.getModules()[1].getMark() + "," + s.getModules()[2].getMark());
+                writer.write(String.format("%-5d %-10s %-20s %-10.3f %-10s %-10d %-10d %-10d",
+                        (i + 1), s.getId(), s.getName(), s.getAverage(), s.getGrade(), s.getModules()[0].getMark(), s.getModules()[1].getMark(), s.getModules()[2].getMark()));
                 writer.newLine();
             }
             System.out.println("Student details stored to file.");
@@ -173,29 +181,52 @@ public class Main {
         }
     }
 
+
+
+
     static void loadStudentDetailsFromFile() {
         try (BufferedReader reader = new BufferedReader(new FileReader("students.txt"))) {
             String line;
             studentCount = 0;
+            boolean skipHeader = true;
             while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                String id = parts[0];
-                String name = parts[1];
-                int[] marks = new int[3];
-                for (int i = 0; i < 3; i++) {
-                    marks[i] = Integer.parseInt(parts[i + 2]);
+                // Skip the header line
+                if (skipHeader || line.startsWith("-")) {
+                    skipHeader = false;
+                    continue;
                 }
+                String[] parts = line.trim().split("\\s+");
+                if (parts.length < 8) {
+                    System.out.println("Skipping invalid line: " + line);
+                    continue;
+                }
+                String id = parts[1];
+                StringBuilder nameBuilder = new StringBuilder(parts[2]);
+                for (int i = 3; i < parts.length - 5; i++) {
+                    nameBuilder.append(" ").append(parts[i]);
+                }
+                String name = nameBuilder.toString();
+                double average = Double.parseDouble(parts[parts.length - 5]);
+                String grade = parts[parts.length - 4];
+                int mark1 = Integer.parseInt(parts[parts.length - 3]);
+                int mark2 = Integer.parseInt(parts[parts.length - 2]);
+                int mark3 = Integer.parseInt(parts[parts.length - 1]);
+
+                int[] marks = {mark1, mark2, mark3};
                 students[studentCount] = new Student(id, name);
                 students[studentCount++].setMarks(marks);
             }
             System.out.println("Student details loaded from file.");
         } catch (IOException e) {
             System.out.println("Error reading from file: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            System.out.println("Error parsing marks: " + e.getMessage());
         }
     }
 
+
+
     static void viewListOfStudents() {
-        Arrays.sort(students, 0, studentCount, Comparator.comparing(Student::getName));
         for (int i = 0; i < studentCount; i++) {
             System.out.println("Student ID: " + students[i].getId() + ", Name: " + students[i].getName());
         }
@@ -263,7 +294,7 @@ public class Main {
             bubbleSortByAverage();
             for (int i = 0; i < studentCount; i++) {
                 Student s = students[i];
-                System.out.println("Student ID: " + s.getId() + ", Name: " + s.getName() + ", Average Marks: " + s.getAverage() + ", Grade: " + s.getGrade());
+                System.out.println("Student ID: " + s.getId() + ", Name: " + s.getName() + ", Average Marks: " + String.format("%.3f", s.getAverage()) + ", Grade: " + s.getGrade());
             }
         }
     }
@@ -271,7 +302,7 @@ public class Main {
     static void bubbleSortByAverage() {
         for (int i = 0; i < studentCount - 1; i++) {
             for (int j = 0; j < studentCount - i - 1; j++) {
-                if (students[j].getAverage() > students[j + 1].getAverage()) {
+                if (students[j].getAverage() < students[j + 1].getAverage()) {
                     Student temp = students[j];
                     students[j] = students[j + 1];
                     students[j + 1] = temp;

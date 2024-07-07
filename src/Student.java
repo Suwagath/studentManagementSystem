@@ -42,18 +42,16 @@ public class Student {
         return sum / 3.0;
     }
 
-    public char getGrade() {
+    public String getGrade() {
         double average = getAverage();
-        if (average >= 70) {
-            return 'A';
-        } else if (average >= 60) {
-            return 'B';
-        } else if (average >= 50) {
-            return 'C';
+        if (average >= 80) {
+            return "Distinction";
+        } else if (average >= 70) {
+            return "Merit";
         } else if (average >= 40) {
-            return 'D';
+            return "Pass";
         } else {
-            return 'F';
+            return "Fail";
         }
     }
 }
