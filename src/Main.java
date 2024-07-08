@@ -227,6 +227,8 @@ public class Main {
 
 
     static void viewListOfStudents() {
+        // sort students by id
+        Arrays.sort(students, 0, studentCount, Comparator.comparing(Student::getId));
         for (int i = 0; i < studentCount; i++) {
             System.out.println("Student ID: " + students[i].getId() + ", Name: " + students[i].getName());
         }
