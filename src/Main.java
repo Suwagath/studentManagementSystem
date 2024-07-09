@@ -40,10 +40,10 @@ public class Main {
                     findStudent(scanner); // Find a student by ID
                     break;
                 case 5:
-                    storeStudentDetailsToFile(); // Save student details to file
+                    storeStudentDetails(); // Save student details to file
                     break;
                 case 6:
-                    loadStudentDetailsFromFile(); // Load student details from file
+                    loadStudentDetails(); // Load student details from file
                     break;
                 case 7:
                     viewListOfStudents(); // Show list of students
@@ -184,7 +184,7 @@ public class Main {
     }
 
     // Method to store student details to a file
-    static void storeStudentDetailsToFile() {
+    static void storeStudentDetails() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("students.txt"))) {
             // Write the header for the file
             writer.write(String.format("%-5s %-10s %-20s %-10s %-10s %-10s %-10s %-10s", "No", "ID", "Name", "Average", "Grade", "Module1", "Module2", "Module3"));
@@ -205,7 +205,7 @@ public class Main {
     }
 
     // Method to load student details from a file
-    static void loadStudentDetailsFromFile() {
+    static void loadStudentDetails() {
         try (BufferedReader reader = new BufferedReader(new FileReader("students.txt"))) {
             String line;
             studentCount = 0; // Reset student count before loading
