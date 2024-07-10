@@ -1,5 +1,12 @@
-import java.io.*; // Importing classes for file I/O operations
-import java.util.*; // Importing classes for utilities like Scanner and Arrays
+import java.io.BufferedReader; // Importing classes for reading from a file
+import java.io.BufferedWriter; // Importing classes for writing to a file
+import java.io.FileReader; // Importing classes for file reading
+import java.io.FileWriter; // Importing classes for file writing
+import java.io.IOException; // Importing class for handling IO exceptions
+import java.util.Scanner; // Importing class for taking user input
+import java.util.Arrays; // Importing class for sorting arrays
+import java.util.Comparator; // Importing class for comparing objects
+
 
 public class Main {
     // Constant for maximum student capacity
