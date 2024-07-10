@@ -4,6 +4,7 @@ public class Student {
     private String name;
     private Module[] modules;
 
+
     // Constructor to initialize the student object with ID and name
     public Student(String id, String name) {
         this.id = id; // Set the student's ID
@@ -34,6 +35,8 @@ public class Student {
     public Module[] getModules() {
         return modules;
     }
+
+
 
     // Method to set the marks for each module
     public void setMarks(int[] marks) {
